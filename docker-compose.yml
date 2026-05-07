@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://heartai:password@postgres:5432/heartai_live
+      - NODE_ENV=production
+    depends_on:
+      - postgres
+    volumes:
+      - ./src:/app/src
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=heartai
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=heartai_live
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
